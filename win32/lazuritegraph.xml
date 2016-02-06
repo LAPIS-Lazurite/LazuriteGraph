@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\a141088\Documents\1)業務\開発データ\lazurite\LazuriteGraph\LazuriteGraph.jar</jar>
+  <outfile>C:\Users\a141088\Documents\1)業務\開発データ\lazurite\LazuriteGraph\LazuriteGraph.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\a141088\Documents\1)業務\開発データ\lazurite\LazuriteGraph\Lazuriteアイコン\lazurite256.ico</icon>
+  <jre>
+    <path>.\java\jre</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.6.0_31</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>jdkOnly</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+</launch4jConfig>
