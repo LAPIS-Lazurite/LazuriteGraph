@@ -56,7 +56,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		LazuriteGraph graph;
-		System.out.println(System.getProperty("java.library.path"));
+//		System.out.println(System.getProperty("java.library.path"));
 		if(args.length>0 ) {
 			graph = new LazuriteGraph(args[0]);
 		} else {
@@ -143,12 +143,16 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		setTitle("Setting Window");
 		setJMenuBar(menubar);
 		setBounds(10, 10, 600, 480);
+
+	    ImageIcon icon = new ImageIcon(Param.App_Icon);
+	    setIconImage(icon.getImage());
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		System.out.println(cmd);
+
 		if (cmd == Param.Label_File_New) {
 			FileNew();
 		} else if (cmd == Param.Label_File_Open) {

@@ -24,6 +24,7 @@ public class Param {
 	static String URL_Logo;
 	static String comGraphTitle;
 	static String comGraphAxisText[] = new String[4];
+	static String App_Icon;
 	static int[] comLineNum = new int[4];
 	static boolean comGraphEnb[] = new boolean[4];
 	static int comBaud;
@@ -51,6 +52,7 @@ public class Param {
 			Label_Graph_Title = properties.getProperty("Label_Graph_Title");
 			File_Path_Logo = properties.getProperty("File_Path_Logo");
 			URL_Logo = properties.getProperty("URL_Logo");
+			App_Icon = properties.getProperty("App_Icon");
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
