@@ -10,5 +10,6 @@ Label_Graph_Line=Number of line
 Label_Com_Updatet=Com Update
 Label_Start=Start graph
 Label_Graph_Title=Graph Title:
-File_Path_Logo=lazurite_logo.png
+File_Path_Logo=res\\lazurite_logo.png
 URL_Logo= http://www.lapis-semi.com/lazurite-jp/
+App_Icon=res\\LazuriteGraph32.png
