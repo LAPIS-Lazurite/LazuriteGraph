@@ -56,21 +56,21 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 		plot.setGap(10.0);
 
 		for (int i = 0; i < 4; i++) {
-			if (Param.comGraphEnb[i]) {
+			if (Param.GraphEnb[i]) {
 				timeSeriesCollection[i] = new TimeSeriesCollection();
-				seriesX[i] = new TimeSeries(Param.comGraphAxisText[i] + "(X)");
+				seriesX[i] = new TimeSeries(Param.GraphAxisText[i] + "(X)");
 				timeSeriesCollection[i].addSeries(seriesX[i]);
-				if (Param.comLineNum[i] >= 2) {
-					seriesY[i] = new TimeSeries(Param.comGraphAxisText[i] + "(Y)");
+				if (Param.LineNum[i] >= 2) {
+					seriesY[i] = new TimeSeries(Param.GraphAxisText[i] + "(Y)");
 					timeSeriesCollection[i].addSeries(seriesY[i]);
 				}
-				if (Param.comLineNum[i] >= 3) {
-					seriesZ[i] = new TimeSeries(Param.comGraphAxisText[i] + "(Z)");
+				if (Param.LineNum[i] >= 3) {
+					seriesZ[i] = new TimeSeries(Param.GraphAxisText[i] + "(Z)");
 					timeSeriesCollection[i].addSeries(seriesZ[i]);
 				}
 				chart[i] = ChartFactory.createTimeSeriesChart("", // title
 						"Time", // x-axis label
-						Param.comGraphAxisText[i], // y-axis label
+						Param.GraphAxisText[i], // y-axis label
 						timeSeriesCollection[i], // data
 						true, // create legend?
 						true, // generate tooltips?
@@ -80,7 +80,7 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 				plot.add(subplot[i]);
 			}
 		}
-		JFreeChart master = new JFreeChart(Param.comGraphTitle, JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+		JFreeChart master = new JFreeChart(Param.GraphTitle, JFreeChart.DEFAULT_TITLE_FONT, plot, true);
 		ChartPanel panel = new ChartPanel(master, true, true, true, false, true);
 		ValueAxis axis = new DateAxis("Time");
 		axis.setAutoRange(true);
@@ -105,18 +105,18 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 					int graphNum = 0;
 					int dataNum = 1;
 					while (graphNum < 4) {
-						if (Param.comGraphEnb[graphNum]) {
+						if (Param.GraphEnb[graphNum]) {
 							Millisecond ms = new Millisecond();
 							float in_x = new Float(inputValues[dataNum]).floatValue();
 							this.timeSeriesCollection[graphNum].getSeries(0).add(ms, in_x);
 							dataNum++;
 
-							if (Param.comLineNum[graphNum] >= 2) {
+							if (Param.LineNum[graphNum] >= 2) {
 								float in_y = new Float(inputValues[dataNum]).floatValue();
 								this.timeSeriesCollection[graphNum].getSeries(1).add(ms, in_y);
 								dataNum++;
 							}
-							if (Param.comLineNum[graphNum] >= 3) {
+							if (Param.LineNum[graphNum] >= 3) {
 								float in_z = new Float(inputValues[dataNum]).floatValue();
 								this.timeSeriesCollection[graphNum].getSeries(2).add(ms, in_z);
 								dataNum++;

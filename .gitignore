@@ -1,2 +1,4 @@
 *.jar
 *.exe
+java/
+bin/
