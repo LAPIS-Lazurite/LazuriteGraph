@@ -25,13 +25,14 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
+import com.lapis_semi.lazurite.io.*;
 
-public class ComChart extends JFrame implements SerialPortEventListener {
+public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEventListener {
 	private TimeSeriesCollection[] timeSeriesCollection = new TimeSeriesCollection[4]; // Collection
-																						// of
-																						// time
-																						// series
-																						// data
+	// of
+	// time
+	// series
+	// data
 	// private XYDataset xyDataset; // dataset that will be used for the chart
 	private TimeSeries[] seriesX = new TimeSeries[4]; // X series data
 	private TimeSeries[] seriesY = new TimeSeries[4]; // Y series data
@@ -41,11 +42,12 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 	private BufferedReader input; // input reader
 	// private OutputStream output; //output reader
 	private SerialPort serialPort; // serial port object
+	private SubGHz subghz; // serial port object
 
 	public ComChart(JButton start) {
 		// super(title);
 		this.start = start;
-		initializeSerial();
+		System.out.println("selected TAB="+Integer.toString(Param.selectedTabIndex));
 		// System.out.println("TH
 		// Enb"+String.valueOf(serialPort.isReceiveThresholdEnabled()));
 		// System.out.println("TH
@@ -75,7 +77,7 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 						true, // create legend?
 						true, // generate tooltips?
 						false // generate URLs?
-				);
+						);
 				subplot[i] = chart[i].getXYPlot();
 				plot.add(subplot[i]);
 			}
@@ -88,49 +90,20 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 		master.getXYPlot().setDomainAxis(axis);
 		setContentPane(panel);
 		addWindowListener(new myListener());
+
+		if(Param.selectedTabIndex == 0) {
+			initializeSerial();
+		} else if(Param.selectedTabIndex == 1) {
+			initializeSubGHz();
+		} else {
+			start.setEnabled(true);
+			return;
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
 	}
 
-	@Override
-	public synchronized void serialEvent(SerialPortEvent event) {
-		if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-			try {
-				String inputLine = input.readLine();
-				while(input.ready()){ inputLine = input.readLine(); }
-				String[] inputValues = inputLine.split(",");
-
-				if (inputValues[0].equals("STX") && inputValues[inputValues.length - 1].equals("ETX")) {
-					int graphNum = 0;
-					int dataNum = 1;
-					while (graphNum < 4) {
-						if (Param.GraphEnb[graphNum]) {
-							Millisecond ms = new Millisecond();
-							float in_x = new Float(inputValues[dataNum]).floatValue();
-							this.timeSeriesCollection[graphNum].getSeries(0).add(ms, in_x);
-							dataNum++;
-
-							if (Param.LineNum[graphNum] >= 2) {
-								float in_y = new Float(inputValues[dataNum]).floatValue();
-								this.timeSeriesCollection[graphNum].getSeries(1).add(ms, in_y);
-								dataNum++;
-							}
-							if (Param.LineNum[graphNum] >= 3) {
-								float in_z = new Float(inputValues[dataNum]).floatValue();
-								this.timeSeriesCollection[graphNum].getSeries(2).add(ms, in_z);
-								dataNum++;
-							}
-						}
-						graphNum++;
-					}
-				}
-				System.out.println(inputLine);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
 
 	private void initializeSerial() {
 		CommPortIdentifier portId = null;
@@ -158,18 +131,95 @@ public class ComChart extends JFrame implements SerialPortEventListener {
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			// output = serialPort.getOutputStream();
 
-			serialPort.addEventListener(this);
+			serialPort.addEventListener(this );
 			serialPort.notifyOnDataAvailable(true);
-
 		} catch (Exception e) {
 			System.err.println("Initialization failed : " + e.toString());
 		}
 	}
 
+	private void initializeSubGHz() {
+		try {
+			subghz = new SubGHz("LazuritePiGateway");
+			subghz.setSerialMode(Param.subghzStrTxaddr);
+			subghz.setInterval(1);
+			subghz.open();
+			input = new BufferedReader(new InputStreamReader(subghz.getInputStream()));
+			subghz.addEventListener(this);
+			subghz.notifyOnDataAvailable(true);
+		} catch (Exception e) {
+			System.out.println(e);
+			return;
+		}
+	}
+
+	@Override
+		public synchronized void serialEvent(SerialPortEvent event) {
+			if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+				System.out.println("rx Serial");
+				plotGraph();
+			}
+		}
+	//  Event Process from SubGHz
+	@Override
+		public synchronized void SubGHzEvent(SubGHzEventObject evt){
+			if(evt.getEventType() == SubGHzEventObject.DATA_AVAILABLE){
+				plotGraph();
+			}
+		}
+
+	public void plotGraph() {
+		String inputLine;
+		try {
+			inputLine = input.readLine();
+//			System.out.println("Rx:: "+inputLine);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return;
+		}
+		String[] inputValues = inputLine.split(",");
+		try {
+			while(inputLine != null){ inputLine = input.readLine(); }
+		} catch (Exception ex) { }
+		if (inputValues[0].equals("STX") && inputValues[inputValues.length - 1].equals("ETX")) {
+			int graphNum = 0;
+			int dataNum = 1;
+			while (graphNum < 4) {
+				if (Param.GraphEnb[graphNum]) {
+					Millisecond ms = new Millisecond();
+					float in_x = new Float(inputValues[dataNum]).floatValue();
+					this.timeSeriesCollection[graphNum].getSeries(0).add(ms, in_x);
+					dataNum++;
+
+					if (Param.LineNum[graphNum] >= 2) {
+						float in_y = new Float(inputValues[dataNum]).floatValue();
+						this.timeSeriesCollection[graphNum].getSeries(1).add(ms, in_y);
+						dataNum++;
+					}
+					if (Param.LineNum[graphNum] >= 3) {
+						float in_z = new Float(inputValues[dataNum]).floatValue();
+						this.timeSeriesCollection[graphNum].getSeries(2).add(ms, in_z);
+						dataNum++;
+					}
+				}
+				graphNum++;
+			}
+		}
+	}
+
 	public synchronized void close() {
-		if (serialPort != null) {
-			serialPort.removeEventListener();
-			serialPort.close();
+		if (Param.selectedTabIndex == 0) {
+			if (serialPort != null) {
+				serialPort.removeEventListener();
+				serialPort.close();
+			}
+		} else {
+			try {
+				subghz.removeEventListener();
+				System.out.println("shutdownHook !!");
+				subghz.close();
+				Thread.sleep(100);
+			}catch (Exception e){ }
 		}
 	}
 
