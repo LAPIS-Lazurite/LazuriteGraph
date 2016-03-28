@@ -2,4 +2,4 @@
 #java -classpath /usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/jre/lib/ext/*.jar;../../../../ com.lapis_semi.lazurite.LazuriteGraph.LazuriteGraph
 #java -classpath ../../../../ com.lapis_semi.lazurite.LazuriteGraph.LazuriteGraph
 #java -Djava.library.path=/usr/lib/jni LazuriteGraph
-java -classpath ../../../../  -Djava.library.path=/usr/lib/jni com.lapis_semi.lazurite.LazuriteGraph.LazuriteGraph
+java -classpath ../../../../  -Djava.library.path=/usr/lib/jni com.lapis_semi.lazurite.LazuriteGraph.LazuriteGraph 10axis.graph

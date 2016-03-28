@@ -17,7 +17,7 @@ public class Param {
 	// File Tab for COM label
 	static String Label_Com_Port;
 	static String Label_Baud;
-	static String Label_Com_Updatet;
+	static String Label_Com_Update;
 
 	// File Tab for SubGHz label
 	static String Label_Subghz_Txaddr;
@@ -51,7 +51,6 @@ public class Param {
 	// SubGHz parameters
 	static int subghzBaud;
 	static String subghzStrTxaddr;
-	static Integer[] subghzTxaddr = new Integer[4];
 	static boolean subghzTxaddrEnb;
 	static int subghzPwr;
 	static String subghzPanid;
@@ -77,7 +76,7 @@ public class Param {
 			Label_Graph_Enable = properties.getProperty("Label_Graph_Enable");
 			Label_Graph_Axis = properties.getProperty("Label_Graph_Axis");
 			Label_Graph_Line = properties.getProperty("Label_Graph_Line");
-			Label_Com_Updatet = properties.getProperty("Label_Com_Updatet");
+			Label_Com_Update = properties.getProperty("Label_Com_Update");
 
 			Label_Subghz_Txaddr = properties.getProperty("Label_Subghz_Txaddr");
 			Label_Subghz_Pwr = properties.getProperty("Label_Subghz_Pwr");

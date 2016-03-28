@@ -156,7 +156,6 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 	@Override
 		public synchronized void serialEvent(SerialPortEvent event) {
 			if (event.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-				System.out.println("rx Serial");
 				plotGraph();
 			}
 		}
@@ -172,15 +171,18 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 		String inputLine;
 		try {
 			inputLine = input.readLine();
-//			System.out.println("Rx:: "+inputLine);
+			System.out.println("Rx:: "+inputLine);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return;
 		}
 		String[] inputValues = inputLine.split(",");
-		try {
-			while(inputLine != null){ inputLine = input.readLine(); }
-		} catch (Exception ex) { }
+		// does not work to read data until end of buffer in Serial
+		if(Param.selectedTabIndex == 1) {
+			try {
+				while(inputLine != null){ inputLine = input.readLine(); }
+			} catch (Exception ex) { }
+		}
 		if (inputValues[0].equals("STX") && inputValues[inputValues.length - 1].equals("ETX")) {
 			int graphNum = 0;
 			int dataNum = 1;

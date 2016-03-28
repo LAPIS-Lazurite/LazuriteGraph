@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.xml.bind.DatatypeConverter;
 
 import org.jfree.ui.RefineryUtilities;
 
@@ -53,6 +54,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		LazuriteGraph graph;
+		System.out.println(System.getProperty("user.dir"));
 //		System.out.println(System.getProperty("java.library.path"));
 		if(args.length>0 ) {
 			graph = new LazuriteGraph(args[0]);
@@ -218,18 +220,22 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		graphSetting.getParam();
 		tabCom.getParam();
 		Param.selectedTabIndex = SettingFrame.getSelectedIndex();
-		if(tabSubGHz.getParam(true) == true) {
-			chart = new ComChart(graphStart);
-			chart.pack();
-			RefineryUtilities.centerFrameOnScreen(chart);
-			chart.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			chart.setVisible(true);
-			chart.addWindowListener(new WindowAdapter() {
-				public void windowClosing() {
-					LazuriteGraph.GraphClose();
-				}
-			});
+		if(Param.selectedTabIndex == 0) {
+		} else if((Param.selectedTabIndex == 1) && (tabSubGHz.getParam(true) == true)) {
+		} else {
+			graphStart.setEnabled(true);
+			return;
 		}
+		chart = new ComChart(graphStart);
+		chart.pack();
+		RefineryUtilities.centerFrameOnScreen(chart);
+		chart.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		chart.setVisible(true);
+		chart.addWindowListener(new WindowAdapter() {
+				public void windowClosing() {
+				LazuriteGraph.GraphClose();
+				}
+				});
 	}
 
 	static void GraphClose() {
@@ -402,41 +408,41 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent arg0) {
-			Desktop desktop = Desktop.getDesktop();
-			try {
-				URI uri = new URI(Param.URL_Logo);
-				desktop.browse(uri);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			public void mouseClicked(MouseEvent arg0) {
+				Desktop desktop = Desktop.getDesktop();
+				try {
+					URI uri = new URI(Param.URL_Logo);
+					desktop.browse(uri);
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		}
 
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// mouse event
+			public void mouseEntered(MouseEvent arg0) {
+				// mouse event
 
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// mouse event
-
-		}
+			}
 
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// mouse event
+			public void mouseExited(MouseEvent arg0) {
+				// mouse event
 
-		}
+			}
 
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// mouse event
+			public void mousePressed(MouseEvent arg0) {
+				// mouse event
 
-		}
+			}
+
+		@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// mouse event
+
+			}
 	}
 
 
@@ -463,7 +469,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			comPortList.setBounds(120, 10, 100, 20);
 			add(comPortList);
 
-			JButton ComButton = new JButton(Param.Label_Com_Updatet);
+			JButton ComButton = new JButton(Param.Label_Com_Update);
 			ComButton.setBounds(240, 10, 100, 20);
 			ComButton.addActionListener(this);
 			add(ComButton);
@@ -510,17 +516,17 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO update com port list
-			String cmd = e.getActionCommand();
-			System.out.println(cmd);
-			if (e.getActionCommand() == "update") {
-				// System.out.println("update");
-				comPortList.removeAllItems();
-				updateComList();
-				// add(comPortList);
+			public void actionPerformed(ActionEvent e) {
+				// TODO update com port list
+				String cmd = e.getActionCommand();
+				System.out.println(cmd);
+				if (e.getActionCommand()== Param.Label_Com_Update){
+					// System.out.println("update");
+					comPortList.removeAllItems();
+					updateComList();
+					// add(comPortList);
+				}
 			}
-		}
 	}
 
 	public class SubghzSetting extends JPanel {
@@ -626,50 +632,27 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			}
 
 			// check value of Txaddr
-			int len = Param.subghzStrTxaddr.length();
-
-			// must be 16bit address mode
-			if(len <= 6) {
-				try{
-					Param.subghzTxaddr[3] = Integer.decode(Param.subghzStrTxaddr);
-					if((Param.subghzTxaddr[3] >= 0) && (Param.subghzTxaddr[3] <= 0xffff)) {
-						for(int i=0; i<=2 ;i++) {
-							Param.subghzTxaddr[i] = 0;
-						}
-						Param.subghzTxaddrEnb = true;
-					} else {
-						Param.subghzTxaddrEnb = false;
-					}
-				} catch(NumberFormatException nfex) {
-					Param.subghzTxaddrEnb = false;
-				}
-			// 64bit address mode
-			} else if(len == 16) {
+			try{
+				DatatypeConverter.parseHexBinary(Param.subghzStrTxaddr);
 				Param.subghzTxaddrEnb = true;
-				try {
-					for(int i=0; i<4;i++) {
-						Param.subghzTxaddr[i] = Integer.parseInt("0x"+Param.subghzStrTxaddr.substring(i,(i+1)*2));
-					}
-				} catch(NumberFormatException nfex) {
-					Param.subghzTxaddrEnb = false;
-				}
-			}
-			// other data format is error
-			else {
+			} catch(Exception e) {
 				Param.subghzTxaddrEnb = false;
+				System.out.println(e);
 			}
-			if((notification) && ((!Param.subghzPanidEnb) || (!Param.subghzTxaddrEnb))){
-				String message = Param.subghzParamError;
-				if(!Param.subghzPanidEnb) {
-					message += " \""+Param.Label_Subghz_Panid+"\"";
-				}
-				if(!Param.subghzTxaddrEnb) {
-					message += " \""+Param.Label_Subghz_Txaddr+"\"";
-				}
-			    JLabel label = new JLabel(message);
-			    JOptionPane.showMessageDialog(this, label);
+			String message = Param.subghzParamError;
+			if((notification) && (!Param.subghzPanidEnb)) {
+				message += Param.Label_Subghz_Panid  +" = "+Param.subghzPanid;
+				JLabel label = new JLabel(message);
+				JOptionPane.showMessageDialog(this, label);
+				return false;
 			}
-			return (Param.subghzPanidEnb | Param.subghzTxaddrEnb );
+			if((notification) && (!Param.subghzTxaddrEnb)) {
+				message += Param.Label_Subghz_Txaddr +" = " + Param.subghzStrTxaddr;
+				JLabel label = new JLabel(message);
+				JOptionPane.showMessageDialog(this, label);
+				return false;
+			}
+			return true;
 		}
 
 	}
