@@ -123,6 +123,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		SettingFrame.addTab("COM",tabCom );
 		SettingFrame.addTab("SubGHz", tabSubGHz);
 		SettingFrame.setBounds(0, 0, 600, 200);
+		SettingFrame.setEnabledAt(1,Param.Subghz_Tab_Enb);
 
 		graphSetting = new GraphSetting();
 
@@ -141,7 +142,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 
 		setTitle("Setting Window");
 		setJMenuBar(menubar);
-		setBounds(10, 10, 600, 480);
+		setBounds(100, 100, 600, 480);
 
 	    ImageIcon icon = new ImageIcon(Param.App_Icon);
 	    setIconImage(icon.getImage());

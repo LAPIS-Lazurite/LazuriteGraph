@@ -24,6 +24,7 @@ public class Param {
 	static String Label_Subghz_Pwr;
 	static String Label_Subghz_Channel;
 	static String Label_Subghz_Panid;
+	static boolean Subghz_Tab_Enb;
 
 	// File Common feild label
 	static String Label_Graph_Enable;
@@ -82,6 +83,7 @@ public class Param {
 			Label_Subghz_Pwr = properties.getProperty("Label_Subghz_Pwr");
 			Label_Subghz_Channel = properties.getProperty("Label_Subghz_Channel");
 			Label_Subghz_Panid = properties.getProperty("Label_Subghz_Panid");
+			Subghz_Tab_Enb = Boolean.valueOf(properties.getProperty("Subghz_Tab_Enb")).booleanValue();
 
 			Label_Start = properties.getProperty("Label_Start");
 			Label_Graph_Title = properties.getProperty("Label_Graph_Title");
