@@ -6,7 +6,7 @@ JAVAC = /usr/bin/javac
 JAVA = /usr/bin/java
 
 all:
-	$(JAVAC) $(CLASSPATH) -g -Xlint $(SRCS)
+	$(JAVAC) -source 1.6 -target 1.6 $(CLASSPATH) -g -Xlint $(SRCS)
 
 .PHONY: clean
 clean:

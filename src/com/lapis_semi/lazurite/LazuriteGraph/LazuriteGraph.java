@@ -277,7 +277,9 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			Param.GraphTitle = properties.getProperty("GraphTitle");
 			Param.comBaud = Integer.parseInt(properties.getProperty("comBaud"));
 			Param.comPort = properties.getProperty("comPort");
+			if(Param.Subghz_Tab_Enb == true) {
 			SettingFrame.setSelectedIndex(Integer.parseInt(properties.getProperty("selectedTab")));
+		}
 			Param.subghzBaud = Integer.parseInt(properties.getProperty("subghzBaud"));
 			Param.subghzStrTxaddr = properties.getProperty("subghzStrTxaddr");
 			Param.subghzPwr = Integer.parseInt(properties.getProperty("subghzPwr"));
