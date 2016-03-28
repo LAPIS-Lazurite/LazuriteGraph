@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="C:/pleiades/workspace/LazuriteGraph/java/jre/lib/ext/jcommon-1.0.23.jar"/>
 	<classpathentry kind="lib" path="C:/pleiades/workspace/LazuriteGraph/java/jre/lib/ext/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="lib" path="C:/pleiades/workspace/LazuriteGraph/java/jre/lib/ext/RXTXcomm.jar"/>
+	<classpathentry kind="lib" path="C:/pleiades/workspace/LazuriteGraph/java/jre/lib/ext/SubGHz.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

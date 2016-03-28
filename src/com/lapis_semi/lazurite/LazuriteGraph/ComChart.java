@@ -21,11 +21,14 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+import com.lapis_semi.lazurite.io.SubGHz;
+import com.lapis_semi.lazurite.io.SubGHzEventListener;
+import com.lapis_semi.lazurite.io.SubGHzEventObject;
+
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
-import com.lapis_semi.lazurite.io.*;
 
 public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEventListener {
 	private TimeSeriesCollection[] timeSeriesCollection = new TimeSeriesCollection[4]; // Collection
@@ -173,7 +176,7 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 			inputLine = input.readLine();
 			System.out.println("Rx:: "+inputLine);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+//			ex.printStackTrace();
 			return;
 		}
 		String[] inputValues = inputLine.split(",");
