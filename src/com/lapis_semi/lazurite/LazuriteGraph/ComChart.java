@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
 
@@ -126,7 +124,6 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 			System.out.println("Port not found");
 			return;
 		}
-		InputStream sis;
 
 		try {
 
@@ -134,8 +131,7 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 			serialPort.setSerialPortParams(Param.comBaud, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 
-			sis = new SerialInputStream (serialPort.getInputStream());
-			input = new BufferedReader(new InputStreamReader(sis));
+			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			// output = serialPort.getOutputStream();
 
 			serialPort.addEventListener(this );
@@ -185,11 +181,11 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 		}
 		String[] inputValues = inputLine.split(",");
 		// does not work to read data until end of buffer in Serial
-//		if(Param.selectedTabIndex == 1) {
+		if(Param.selectedTabIndex == 1) {
 			try {
 				while(inputLine != null){ inputLine = input.readLine(); }
 			} catch (Exception ex) { }
-//		}
+		}
 		if (inputValues[0].equals("STX") && inputValues[inputValues.length - 1].equals("ETX")) {
 			int graphNum = 0;
 			int dataNum = 1;
@@ -236,40 +232,6 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 		public void windowClosing(WindowEvent e) {
 			close();
 			start.setEnabled(true);
-		}
-	}
-
-	public class SerialInputStream extends InputStream {
-		InputStream is;
-		public SerialInputStream(InputStream in) {
-			is = in;
-		}
-		public int read() throws IOException {
-			return is.read();
-		}
-		public int read(byte[] b) throws IOException {
-			return read(b,0,b.length);
-		}
-		public int read(char[] cbuf, int offset, int length) throws IOException {
-			int c;
-			int data;
-			for(c=0;c<length;c++) {
-				data = read();
-				if(data < 0) {
-					break;
-				}
-				cbuf[offset+c] = (char)data;
-			}
-			if(c==0) {c=-1;}
-			return c;
-		}
-
-		public int available() throws IOException {
-			return is.available();
-		}
-
-		public void close() throws IOException {
-			is.close();
 		}
 	}
 
