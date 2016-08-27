@@ -18,4 +18,4 @@ Label_Subghz_Txaddr= txAddr:
 Label_Subghz_Pwr= Power(mW):
 Label_Subghz_Channel= Channel:
 Label_Subghz_Panid= PANID:
-
+Subghz_Tab_Enb= true

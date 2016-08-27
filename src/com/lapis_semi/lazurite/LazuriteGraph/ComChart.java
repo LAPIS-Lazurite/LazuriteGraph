@@ -9,7 +9,7 @@ import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-
+import com.lapis_semi.lazurite.io.Liblazurite;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -21,16 +21,13 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import com.lapis_semi.lazurite.io.SubGHz;
-import com.lapis_semi.lazurite.io.SubGHzEventListener;
-import com.lapis_semi.lazurite.io.SubGHzEventObject;
-
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
-public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEventListener {
+public class ComChart extends JFrame implements SerialPortEventListener,RawEventListener {
+		static final long serialVersionUID = 1L;
 	private TimeSeriesCollection[] timeSeriesCollection = new TimeSeriesCollection[4]; // Collection
 	// of
 	// time
@@ -45,7 +42,7 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 	private BufferedReader input; // input reader
 	// private OutputStream output; //output reader
 	private SerialPort serialPort; // serial port object
-	private SubGHz subghz; // serial port object
+	private Raw subghz; // serial port object
 
 	public ComChart(JButton start) {
 		// super(title);
@@ -110,7 +107,7 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 
 	private void initializeSerial() {
 		CommPortIdentifier portId = null;
-		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
 
 		while (portEnum.hasMoreElements()) {
 			CommPortIdentifier currentPortIdentifier = (CommPortIdentifier) portEnum.nextElement();
@@ -142,18 +139,37 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 	}
 
 	private void initializeSubGHz() {
+		byte ch;
+		int int_panid;
+		short panid;
+		byte baud;
+		byte pwr;
+		int int_txaddr;
+		short txaddr;
 		try {
-			subghz = new SubGHz("LazuritePiGateway");
-			subghz.setSerialMode(Param.subghzStrTxaddr);
+			subghz = new Raw();
 			subghz.setInterval(1);
-			subghz.open();
-			input = new BufferedReader(new InputStreamReader(subghz.getInputStream()));
 			subghz.addEventListener(this);
-			subghz.notifyOnDataAvailable(true);
+			ch = (byte)Param.subghzChannel;
+			System.out.println("CH="+String.valueOf(ch));
+			int_panid = Integer.decode(Param.subghzPanid);
+			panid = (short)int_panid;
+			System.out.println("panid="+String.valueOf(panid));
+			baud = (byte)Param.subghzBaud;
+			System.out.println("baud="+String.valueOf(baud));
+			pwr = (byte)Param.subghzPwr;
+			System.out.println("pwr="+String.valueOf(pwr));
+			int_txaddr = Integer.decode(Param.subghzStrTxaddr);
+			txaddr = (short)int_txaddr;
+			subghz.open( ch,panid,baud,pwr,txaddr);
+			System.out.println("end of subghz.open");
+			input = new BufferedReader(new InputStreamReader(subghz.getInputStream()));
+			System.out.println("end of BufferedReader");
 		} catch (Exception e) {
 			System.out.println(e);
 			return;
 		}
+		System.out.println("end of initializeSubGHz");
 	}
 
 	@Override
@@ -164,8 +180,8 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 		}
 	//  Event Process from SubGHz
 	@Override
-		public synchronized void SubGHzEvent(SubGHzEventObject evt){
-			if(evt.getEventType() == SubGHzEventObject.DATA_AVAILABLE){
+		public synchronized void RawEvent(RawEventObject evt){
+			if(evt.getEventType() == RawEventObject.DATA_AVAILABLE){
 				plotGraph();
 			}
 		}
@@ -220,10 +236,9 @@ public class ComChart extends JFrame implements SerialPortEventListener,SubGHzEv
 			}
 		} else {
 			try {
-				subghz.removeEventListener();
 				System.out.println("shutdownHook !!");
+				subghz.removeEventListener();
 				subghz.close();
-				Thread.sleep(100);
 			}catch (Exception e){ }
 		}
 	}

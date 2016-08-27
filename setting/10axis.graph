@@ -1,5 +1,5 @@
 #store test
-#Wed Mar 16 12:36:52 JST 2016
+#Sat Aug 27 15:56:53 JST 2016
 subghzChannel=36
 GraphEnb3=true
 GraphEnb2=true
@@ -8,9 +8,9 @@ GraphEnb1=true
 comBaud=115200
 GraphEnb0=true
 subghzPanid=0xABCD
-subghzStrTxaddr=001d12900003902b
+subghzStrTxaddr=0x1006
 GraphTitle=10axis graph
-comPort=
+comPort=/dev/ttyUSB0
 selectedTab=1
 GraphAxisText3=pressure
 subghzBaud=100

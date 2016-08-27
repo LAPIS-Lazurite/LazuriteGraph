@@ -6,11 +6,11 @@ JAVAC = /usr/bin/javac
 JAVA = /usr/bin/java
 
 all:
-	$(JAVAC) -source 1.6 -target 1.6 $(CLASSPATH) -g -Xlint $(SRCS)
+	$(JAVAC) $(CLASSPATH) -g -Xlint $(SRCS)
 
 .PHONY: clean
 clean:
-	rm -f $(SRCPATH)*.class
+	rm -f $(SRCPATH)*.class LazuriteGraph
 
 install:
 	sudo cp lib/RXTXcomm.jar lib/jcommon-1.0.23.jar lib/jfreechart-1.0.19.jar $(LIBPATH)

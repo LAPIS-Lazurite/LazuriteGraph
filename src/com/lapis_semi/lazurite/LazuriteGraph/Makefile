@@ -10,7 +10,3 @@ all:
 clean:
 	rm -f *.class
 
-install:
-	jar cvf SubGHz.jar -C ../../../../ com
-	sudo cp SubGHz.jar /usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/jre/lib/ext/
-

@@ -41,6 +41,7 @@ import gnu.io.CommPortIdentifier;
 
 
 public class LazuriteGraph extends JFrame implements ActionListener {
+		static final long serialVersionUID = 1L;
 	static ComChart chart;
 
 	JTabbedPane SettingFrame;
@@ -333,7 +334,11 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 
 
 	public class GraphSetting extends JPanel implements MouseListener{
-		private JComboBox[] lineNum = new JComboBox[4];
+		static final long serialVersionUID = 1L;
+		private JComboBox<Integer> lineNum0 = new JComboBox<Integer>();
+		private JComboBox<Integer> lineNum1 = new JComboBox<Integer>();
+		private JComboBox<Integer> lineNum2 = new JComboBox<Integer>();
+		private JComboBox<Integer> lineNum3 = new JComboBox<Integer>();
 		private JLabel graphTitleLabel = new JLabel();
 		private JTextField graphTitleText = new JTextField();
 		private JLabel[] graphLabel = new JLabel[4];
@@ -371,20 +376,33 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 				graphEnb[i] = new JCheckBox();
 				graphEnb[i].setSelected(Param.GraphEnb[i]);
 				graphAxisText[i] = new JTextField(Param.GraphAxisText[i]);
-				Integer[] j = { 1, 2, 3 };
-				lineNum[i] = new JComboBox(j);
-				lineNum[i].setSelectedItem(Param.LineNum[i]);
 
 				graphLabel[i].setBounds(10, 90 + i * 30, 100, 20);
 				graphEnb[i].setBounds(120, 90 + i * 30, 100, 20);
 				graphAxisText[i].setBounds(220, 90 + i * 30, 200, 20);
-				lineNum[i].setBounds(440, 90 + i * 30, 100, 20);
 
 				add(graphLabel[i]);
 				add(graphEnb[i]);
 				add(graphAxisText[i]);
-				add(lineNum[i]);
 			}
+			Integer[] j = { 1, 2, 3 };
+			lineNum0 = new JComboBox<Integer>(j);
+			lineNum0.setSelectedItem(Param.LineNum[0]);
+			lineNum1 = new JComboBox<Integer>(j);
+			lineNum1.setSelectedItem(Param.LineNum[1]);
+			lineNum2 = new JComboBox<Integer>(j);
+			lineNum2.setSelectedItem(Param.LineNum[2]);
+			lineNum3 = new JComboBox<Integer>(j);
+			lineNum3.setSelectedItem(Param.LineNum[3]);
+			lineNum0.setBounds(440, 90 + 0 * 30, 100, 20);
+			lineNum1.setBounds(440, 90 + 1 * 30, 100, 20);
+			lineNum2.setBounds(440, 90 + 2 * 30, 100, 20);
+			lineNum3.setBounds(440, 90 + 3 * 30, 100, 20);
+			add(lineNum0);
+			add(lineNum1);
+			add(lineNum2);
+			add(lineNum3);
+
 			ImageIcon logo_icon = new ImageIcon(Param.File_Path_Logo);
 			JLabel logo_label = new JLabel(logo_icon);
 			logo_label.setBounds(350, 10,200, 40);
@@ -396,8 +414,11 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			for (int i = 0; i < 4; i++) {
 				graphEnb[i].setSelected(Param.GraphEnb[i]);
 				graphAxisText[i].setText(Param.GraphAxisText[i]);
-				lineNum[i].setSelectedItem(Param.LineNum[i]);
 			}
+			lineNum0.setSelectedItem(Param.LineNum[0]);
+			lineNum1.setSelectedItem(Param.LineNum[1]);
+			lineNum2.setSelectedItem(Param.LineNum[2]);
+			lineNum3.setSelectedItem(Param.LineNum[3]);
 			graphTitleText.setText(Param.GraphTitle);
 		}
 
@@ -405,8 +426,11 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			for (int i = 0; i < 4; i++) {
 				Param.GraphEnb[i] = graphEnb[i].isSelected();
 				Param.GraphAxisText[i] = graphAxisText[i].getText();
-				Param.LineNum[i] = (Integer) lineNum[i].getSelectedItem();
 			}
+			Param.LineNum[0] = (Integer) lineNum0.getSelectedItem();
+			Param.LineNum[1] = (Integer) lineNum1.getSelectedItem();
+			Param.LineNum[2] = (Integer) lineNum2.getSelectedItem();
+			Param.LineNum[3] = (Integer) lineNum3.getSelectedItem();
 			Param.GraphTitle = graphTitleText.getText();
 		}
 
@@ -455,8 +479,9 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		}
 	}
 	public class ComSetting extends JPanel implements ActionListener {
-		private JComboBox comPortList;
-		JComboBox comBaudList;
+		static final long serialVersionUID = 1L;
+		private JComboBox<String> comPortList;
+		JComboBox<Integer> comBaudList;
 
 		public ComSetting() {
 
@@ -466,7 +491,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			ComLabel.setBounds(10, 10, 100, 20);
 			add(ComLabel);
 
-			comPortList = new JComboBox();
+			comPortList = new JComboBox<String>();
 			updateComList();
 			comPortList.setPreferredSize(new Dimension(100, 20));
 			comPortList.setBounds(120, 10, 100, 20);
@@ -482,7 +507,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			add(BaudLabel);
 
 			Integer[] baud = { 9600, 115200 };
-			comBaudList = new JComboBox(baud);
+			comBaudList = new JComboBox<Integer>(baud);
 			comBaudList.setBounds(120, 40, 100, 20);
 			add(comBaudList);
 
@@ -508,7 +533,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 
 		private void updateComList() {
 			// CommPortIdentifier portId = null;
-			Enumeration portEnum;
+			Enumeration<?> portEnum;
 			portEnum = CommPortIdentifier.getPortIdentifiers();
 			// ComBox.addItem("COM1");
 
@@ -533,11 +558,12 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 	}
 
 	public class SubghzSetting extends JPanel {
-		private JComboBox subghzBaud;
-		private JComboBox subghzChannel;
+		static final long serialVersionUID = 1L;
+		private JComboBox<Integer> subghzBaud;
+		private JComboBox<Integer> subghzChannel;
 		private JTextField subghzPanid;
 		private JTextField subghzTxAddr;
-		private JComboBox subghzPwr;
+		private JComboBox<Integer> subghzPwr;
 
 		public SubghzSetting(){
 
@@ -545,11 +571,12 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			JLabel chLabel = new JLabel(Param.Label_Subghz_Channel);
 			chLabel.setBounds(10,10,100,20);
 
-			ArrayList<Integer> channel = new ArrayList<Integer>();
+			//ArrayList<Integer> channel = new ArrayList<Integer>();
+			Integer[] channel = new Integer[61-24+1];
 			for(int i=24; i<= 61 ; i++) {
-				channel.add(i);
+				channel[i-24] = i;
 			}
-			subghzChannel = new JComboBox(channel.toArray());
+			subghzChannel = new JComboBox<Integer>(channel);
 			subghzChannel.setSelectedItem(36);
 			subghzChannel.setBounds(120, 10, 100, 20);
 
@@ -557,7 +584,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			baudLabel.setBounds(10,40,100,20);
 
 			Integer[] baud = {50,100};
-			subghzBaud = new JComboBox(baud);
+			subghzBaud = new JComboBox<Integer>(baud);
 			subghzBaud.setSelectedItem(100);
 			subghzBaud.setBounds(120,40,100,20);
 
@@ -568,7 +595,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			pwrLabel.setBounds(340,10,100,20);
 
 			Integer[] pwr = {1,20};
-			subghzPwr = new JComboBox(pwr);
+			subghzPwr = new JComboBox<Integer>(pwr);
 			subghzPwr.setSelectedItem(20);
 			subghzPwr.setBounds(440,10,100,20);
 
@@ -621,6 +648,7 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 		}
 
 		private boolean checkValue(boolean notification) {
+			String message ="";
 			// check value of Panid
 			try {
 				int panid;
@@ -635,14 +663,13 @@ public class LazuriteGraph extends JFrame implements ActionListener {
 			}
 
 			// check value of Txaddr
-			try{
-				DatatypeConverter.parseHexBinary(Param.subghzStrTxaddr);
+			try {
+				int int_txaddr;
+				int_txaddr = Integer.decode(Param.subghzStrTxaddr);
 				Param.subghzTxaddrEnb = true;
-			} catch(Exception e) {
+			} catch (Exception e) {
 				Param.subghzTxaddrEnb = false;
-				System.out.println(e);
 			}
-			String message = Param.subghzParamError;
 			if((notification) && (!Param.subghzPanidEnb)) {
 				message += Param.Label_Subghz_Panid  +" = "+Param.subghzPanid;
 				JLabel label = new JLabel(message);
