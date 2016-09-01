@@ -1,7 +1,7 @@
 CLASSPATH = -classpath ./src
 SRCS = $(wildcard ./src/com/lapis_semi/lazurite/LazuriteGraph/*.java)
 SRCPATH = ./src/com/lapis_semi/lazurite/LazuriteGraph/
-LIBPATH =  /usr/lib/jvm/jdk-8-oracle-arm-vfp-hflt/jre/lib/ext
+LIBPATH =  /usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt/jre/lib/ext
 JAVAC = /usr/bin/javac
 JAVA = /usr/bin/java
 
